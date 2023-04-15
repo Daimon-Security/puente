@@ -90,8 +90,7 @@ setTimeout(() => processQueue(eventsCollection), 1000);
 }
 
 // Escucha eventos en la cadena EVM forkeada de Geth
-gethTokenBridge.events.Transfer({}, async (error, event) => {
-
+gethTokenBridge.events.TokensLocked({}, async (error, event) => {
 if (error) {
 console.error("Error in Geth TokensLocked event:", error);
 return;
@@ -108,7 +107,7 @@ await eventsCollection.insertOne({ chain: "geth", user, amount, processed: false
 });
 
 // Escucha eventos en Binance Smart Chain (BSC)
-bscTokenBridge.events.Transfer({}, async (error, event) => {
+bscTokenBridge.events.TokensLocked({}, async (error, event) => {
 if (error) {
 console.error("Error in BSC TokensLocked event:", error);
 return;
