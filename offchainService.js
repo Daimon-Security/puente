@@ -25,6 +25,7 @@ bscWeb3.eth.accounts.wallet.add(account);
 bscWeb3.eth.defaultAccount = account.address;
 
 const gethTokenBridgeJson = require("./abi/TokenBridge.json");
+console.log('gethTokenBridgeJson:', gethTokenBridgeJson); // agrega esta línea para imprimir la variable
 const bscTokenBridgeJson = require("./abi/TokenBridge.json");
 const wrappedTokenJson = require("./abi/WrappedToken.json");
 
