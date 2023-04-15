@@ -30,19 +30,20 @@ const bscTokenBridgeJson = require("./abi/TokenBridge.json");
 const wrappedTokenJson = require("./abi/WrappedToken.json");
 
 const gethTokenBridge = new gethWeb3.eth.Contract(
-  gethTokenBridgeJson.abi,
+  gethTokenBridgeJson,
   gethTokenBridgeAddress
 );
 const bscTokenBridge = new bscWeb3.eth.Contract(
-  bscTokenBridgeJson.abi,
+  bscTokenBridgeJson,
   bscTokenBridgeAddress
 );
+
 const gethWrappedToken = new gethWeb3.eth.Contract(
-  wrappedTokenJson.abi,
+  wrappedTokenJson,
   gethWrappedTokenAddress
 );
 const bscWrappedToken = new bscWeb3.eth.Contract(
-  wrappedTokenJson.abi,
+  wrappedTokenJson,
   bscWrappedTokenAddress
 );
 
