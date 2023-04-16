@@ -14,7 +14,8 @@ const mongodbUri = process.env.MONGODB_URI;
 
 // Conexión a los nodos RPC
 const gethWeb3 = new Web3(gethRpcUrl);
-const bscWeb3 = new Web3(bscRpcUrl);
+const bscWeb3 = new Web3(new Web3.providers.HttpProvider(bscRpcUrl));
+
 
 // Configuración de las cuentas y contratos
 const account = gethWeb3.eth.accounts.privateKeyToAccount(privateKey);
