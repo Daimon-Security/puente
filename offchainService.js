@@ -63,7 +63,8 @@ async function processEvent(event) {
   const wrappedToken = chain === "geth" ? bscWrappedToken : gethWrappedToken;
 
   try {
-    const receipt = await wrappedToken.methods.mint(user, amount).send({ from: account.address });
+    const receipt = await wrappedToken.methods.mint(user, amount).send({ from: account.address, gas: 100000 });
+
     console.log(`Tokens minted on ${chain === "geth" ? "BSC" : "Geth"}:`, receipt);
     return true;
   } catch (error) {
