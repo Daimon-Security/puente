@@ -70,7 +70,8 @@ async function connectToDatabase() {
       console.log("Agregando evento a la base de datos...");
       await eventsCollection.insertOne({ transactionHash, network: "bsc" });
     } else {
-      console.log("El evento ya existe en la base de datos.");
+      console.log(`El evento ya existe en la base de datos: ${existingEvent.transactionHash})`);
+
     }
   });
 }
@@ -122,7 +123,8 @@ const receipt = await bscWeb3.eth.sendSignedTransaction(signedTx.rawTransaction)
 console.log(`Transferencia realizada en BSC: ${receipt.transactionHash}`);
 
 } else {
-console.log(El evento ya existe en la base de datos: ${existingEvent.transactionHash});
+  console.log(`El evento ya existe en la base de datos: ${existingEvent.transactionHash})`);
+
 }
 });
 
