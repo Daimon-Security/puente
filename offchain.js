@@ -1,6 +1,5 @@
 require("dotenv").config();
 const Web3 = require("web3");
-console.log(web3.version); // Imprime la versión de Web3 utilizada
 const { MongoClient } = require("mongodb");
 
 // Configuración
@@ -17,6 +16,8 @@ const {
 
 // Conexión a los nodos RPC
 const gethWeb3 = new Web3(GETH_RPC_URL);
+console.log(Web3.version); // Imprime la versión de Web3 utilizada
+
 const bscWeb3 = new Web3(new Web3.providers.HttpProvider(BSC_RPC_URL));
 
 // Configuración de las cuentas y contratos
