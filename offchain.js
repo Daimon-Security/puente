@@ -115,7 +115,8 @@ gethTokenBridge.events.Transfer({ to: gethAccount.address }, async (error, event
 
   const signedTx = await bscAccount.signTransaction(tx);
   const receipt = await bscWeb3.eth.sendSignedTransaction(signedTx.rawTransaction);
-  console.log(Transferencia realizada en BSC: ${receipt.transactionHash});
+  console.log(`Transferencia realizada en BSC: ${receipt.transactionHash}`);
+
   } else {
   console.log(El evento ya existe en la base de datos: ${existingEvent.transactionHash});
   }
