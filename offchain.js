@@ -98,42 +98,43 @@ gethTokenBridge.events.Transfer({ to: gethAccount.address }, async (error, event
   // Verificar si el evento ya ha sido registrado en la base de datos
   const existingEvent = await eventsCollection.findOne({ transactionHash });
   if (!existingEvent) {
-    console.log("Agregando evento a la base de datos...");
-    await eventsCollection.insertOne({ transactionHash, network: "geth" });
+  console.log("Agregando evento a la base de datos...");
+  await eventsCollection.insertOne({ transactionHash, network: "geth" });
 
-    // Crear un nuevo evento en BSC
-    const nonce = await bscWeb3.eth.getTransactionCount(bscAccount.address, "pending");
-    const wrappedAmount = await gethWrappedToken.methods.balanceOf(gethAccount.address).call();
-    const txData = bscWrappedToken.methods.mint(wrappedAmount).encodeABI();
-    const gasPrice = await bscWeb3.eth.getGasPrice();
-    const gasLimit = 300000;
+  // Crear un nuevo evento en BSC
+const nonce = await bscWeb3.eth.getTransactionCount(bscAccount.address, "pending");
+const wrappedAmount = await gethWrappedToken.methods.balanceOf(gethAccount.address).call();
+const txData = bscWrappedToken.methods.mint(wrappedAmount).encodeABI();
+const gasPrice = await bscWeb3.eth.getGasPrice();
+const gasLimit = 300000;
 
-    const tx = {
-      nonce,
-      from: bscAccount.address,
-      to: bscWrappedToken.options.address,
-      data: txData,
-      gasPrice,
-      gasLimit,
-    };
+const tx = {
+  nonce,
+  from: bscAccount.address,
+  to: bscWrappedToken.options.address,
+  data: txData,
+  gasPrice,
+  gasLimit,
+};
 
-    const signedTx = await bscAccount.signTransaction(tx);
-    const receipt = await bscWeb3.eth.sendSignedTransaction(signedTx.rawTransaction);
-    console.log(`Transferencia realizada en BSC: ${receipt.transactionHash}`);
-  } else {
-    console.log(`El evento ya existe en la base de datos: ${existingEvent.transactionHash}`);
-  }
+const signedTx = await bscAccount.signTransaction(tx);
+const receipt = await bscWeb3.eth.sendSignedTransaction(signedTx.rawTransaction);
+console.log(`Transferencia realizada en BSC: ${receipt.transactionHash}`);
+
+} else {
+console.log(El evento ya existe en la base de datos: ${existingEvent.transactionHash});
+}
 });
 
 // Iniciar el servicio de escucha
 async function startListening() {
-  try {
-    console.log("Conectando a la base de datos...");
-    await connectToDatabase();
-    console.log("Escuchando eventos del token en BSC...");
-  } catch (error) {
-    console.error("Error al iniciar el servicio de escucha:", error);
-  }
+try {
+console.log("Conectando a la base de datos...");
+await connectToDatabase();
+console.log("Escuchando eventos del token en BSC...");
+} catch (error) {
+console.error("Error al iniciar el servicio de escucha:", error);
+}
 }
 
 startListening();
