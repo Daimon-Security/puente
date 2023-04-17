@@ -82,24 +82,18 @@ async function startListening() {
   }
 }
 
-startListening();
-} else {
-  console.log(`El evento ya existe en la base de datos: ${existingEvent.transactionHash}`);
-}
-});
-
 // Escuchar eventos en Geth
 gethTokenBridge.events.Transfer({ to: gethAccount.address }, async (error, event) => {
-if (error) {
-console.error("Error al recibir evento de Geth:", error);
-return;
-}
+  if (error) {
+    console.error("Error al recibir evento de Geth:", error);
+    return;
+  }
 
-const { transactionHash } = event;
+  const { transactionHash } = event;
 
-// Verificar si el evento ya ha sido registrado en la base de datos
-const existingEvent = await eventsCollection.findOne({ transactionHash });
-if (!existingEvent) {
+  // Verificar si el evento ya ha sido registrado en la base de datos
+  const existingEvent = await eventsCollection.findOne({ transactionHash });
+  if (!existingEvent) {
   console.log("Agregando evento a la base de datos...");
   await eventsCollection.insertOne({ transactionHash, network: "geth" });
 
@@ -111,22 +105,22 @@ if (!existingEvent) {
   const gasLimit = 300000;
 
   const tx = {
-    nonce,
-    from: bscAccount.address,
-    to: bscWrappedToken.options.address,
-    data: txData,
-    gasPrice,
-    gasLimit,
+  nonce,
+  from: bscAccount.address,
+  to: bscWrappedToken.options.address,
+  data: txData,
+  gasPrice,
+  gasLimit,
   };
 
   const signedTx = await bscAccount.signTransaction(tx);
   const receipt = await bscWeb3.eth.sendSignedTransaction(signedTx.rawTransaction);
-  console.log(`Transferencia realizada en BSC: ${receipt.transactionHash}`);
-} else {
-  console.log(`El evento ya existe en la base de datos: ${existingEvent.transactionHash}`);
-}
+  console.log(Transferencia realizada en BSC: ${receipt.transactionHash});
+  } else {
+  console.log(El evento ya existe en la base de datos: ${existingEvent.transactionHash});
+  }
 
-});
-}
+  });
+  }
 
-startListening();
+  startListening();
