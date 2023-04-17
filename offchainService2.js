@@ -58,6 +58,7 @@ async function connectToDatabase() {
 async function processEvent(event) {
   const { chain, user, amount } = event;
   const wrappedToken = chain === "geth" ? bscWrappedToken : gethWrappedToken;
+  const account = chain === "geth" ? gethAccount : bscAccount;
 
   try {
     const receipt = await wrappedToken.methods
@@ -71,6 +72,7 @@ async function processEvent(event) {
     return false;
   }
 }
+
 
 async function processQueue(eventsCollection) {
   const event = await eventsCollection.findOne({ processed: false });
