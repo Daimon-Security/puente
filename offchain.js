@@ -122,6 +122,6 @@ gethTokenBridge.events.Transfer({ to: gethAccount.address }, async (error, event
   }
 
   });
-  }
+  } }
 
   startListening();
