@@ -118,7 +118,7 @@ gethTokenBridge.events.Transfer({ to: gethAccount.address }, async (error, event
   console.log(`Transferencia realizada en BSC: ${receipt.transactionHash}`);
 
   } else {
-  console.log(El evento ya existe en la base de datos: ${existingEvent.transactionHash});
+    console.log(`El evento ya existe en la base de datos: ${existingEvent.transactionHash}`);
   }
 
   });
