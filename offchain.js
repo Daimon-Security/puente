@@ -50,10 +50,83 @@ async function connectToDatabase() {
   const client = new MongoClient(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
   await client.connect();
   const db = client.db("token_bridge");
-  const eventsCollection
-} catch (error) {
-console.error("Error al iniciar el servicio de escucha:", error);
+  const eventsCollection = db.collection("events");
+
+  // Escuchar eventos del token en BSC
+  bscWrappedToken.events.Transfer({}, async (error, event) => {
+    if (error) {
+      console.error("Error al recibir el evento:", error);
+      return;
+    }
+
+    const { transactionHash } = event;
+    const existingEvent = await eventsCollection.findOne({ transactionHash });
+
+    if (!existingEvent) {
+      console.log("Agregando evento a la base de datos...");
+      await eventsCollection.insertOne({ transactionHash, network: "bsc" });
+    } else {
+      console.log("El evento ya existe en la base de datos.");
+    }
+  });
 }
+
+// Iniciar el servicio de escucha
+async function startListening() {
+  try {
+    console.log("Conectando a la base de datos...");
+    await connectToDatabase();
+    console.log("Escuchando eventos del token en BSC...");
+  } catch (error) {
+    console.error("Error al iniciar el servicio de escucha:", error);
+  }
+}
+
+startListening();
+} else {
+  console.log(`El evento ya existe en la base de datos: ${existingEvent.transactionHash}`);
+}
+});
+
+// Escuchar eventos en Geth
+gethTokenBridge.events.Transfer({ to: gethAccount.address }, async (error, event) => {
+if (error) {
+console.error("Error al recibir evento de Geth:", error);
+return;
+}
+
+const { transactionHash } = event;
+
+// Verificar si el evento ya ha sido registrado en la base de datos
+const existingEvent = await eventsCollection.findOne({ transactionHash });
+if (!existingEvent) {
+  console.log("Agregando evento a la base de datos...");
+  await eventsCollection.insertOne({ transactionHash, network: "geth" });
+
+  // Crear un nuevo evento en BSC
+  const nonce = await bscWeb3.eth.getTransactionCount(bscAccount.address, "pending");
+  const wrappedAmount = await gethWrappedToken.methods.balanceOf(gethAccount.address).call();
+  const txData = bscWrappedToken.methods.mint(wrappedAmount).encodeABI();
+  const gasPrice = await bscWeb3.eth.getGasPrice();
+  const gasLimit = 300000;
+
+  const tx = {
+    nonce,
+    from: bscAccount.address,
+    to: bscWrappedToken.options.address,
+    data: txData,
+    gasPrice,
+    gasLimit,
+  };
+
+  const signedTx = await bscAccount.signTransaction(tx);
+  const receipt = await bscWeb3.eth.sendSignedTransaction(signedTx.rawTransaction);
+  console.log(`Transferencia realizada en BSC: ${receipt.transactionHash}`);
+} else {
+  console.log(`El evento ya existe en la base de datos: ${existingEvent.transactionHash}`);
+}
+
+});
 }
 
 startListening();
