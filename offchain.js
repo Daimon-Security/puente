@@ -1,5 +1,6 @@
 require("dotenv").config();
 const Web3 = require("web3");
+console.log(web3.version); // Imprime la versión de Web3 utilizada
 const { MongoClient } = require("mongodb");
 
 // Configuración
