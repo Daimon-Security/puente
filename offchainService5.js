@@ -93,8 +93,6 @@ return true;
 } catch (error) {
   console.error(`Error minting tokens on ${chain === "geth" ? "BSC" : "Geth"} (attempt ${retryCount + 1}):`, error);
 
-error
-);
 
 await new Promise((resolve) => setTimeout(resolve, 10000));
 return processEvent(event, retryCount + 1);
