@@ -91,7 +91,7 @@ async function processEvent(event, retryCount = 0) {
     error
   );
 
-  await new Promise((resolve) => setTimeout(resolve, 10000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   return processEvent(event, retryCount + 1);
 }
 }
@@ -115,7 +115,7 @@ const startingBlock = 0;
 
 async function startListeningGeth() {
 const currentBlock = await gethWeb3.eth.getBlockNumber();
-const step = 5000;
+const step = 500;
 let fromBlock = startingBlock;
 
 while (fromBlock <= currentBlock) {
@@ -153,7 +153,7 @@ gethWeb3.eth.subscribe("newBlockHeaders", async (error, blockHeader) => {
 
 async function startListeningBSC() {
 const currentBlock = await bscWeb3.eth.getBlockNumber();
-const step = 5000;
+const step = 1000;
 let fromBlock = startingBlock;
 
 while (fromBlock <= currentBlock) {
