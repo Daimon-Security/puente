@@ -115,7 +115,6 @@ async function processQueue(eventsCollection) {
 
   setTimeout(() => processQueue(eventsCollection), 1000);
 }
-
 // Iniciar el servicio de escucha
 async function startListening() {
   const currentBlock = await gethWeb3.eth.getBlockNumber();
@@ -155,10 +154,8 @@ async function startListening() {
   });
 }
 
-  } catch (error) {
-    console.error("Error al iniciar el servicio de escucha:", error);
-  }
+try {
+  startListening();
+} catch (error) {
+  console.error("Error al iniciar el servicio de escucha:", error);
 }
-
-
-startListening();
