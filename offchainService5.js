@@ -91,7 +91,8 @@ console.log(`Tokens minted on ${chain === "geth" ? "BSC" : "Geth"}:`, receipt);
 return true;
 
 } catch (error) {
-console.error(´Error minting tokens on ${chain === "geth" ? "BSC" : "Geth"} (attempt ${retryCount + 1}):´,
+  console.error(`Error minting tokens on ${chain === "geth" ? "BSC" : "Geth"} (attempt ${retryCount + 1}):`, error);
+
 error
 );
 
