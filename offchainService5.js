@@ -142,7 +142,8 @@ await processEvents(events);
 
 gethWeb3.eth.subscribe("newBlockHeaders", async (error, blockHeader) => {
 if (error) {
-console.error(Error al suscribirse a nuevos bloques: ${error});
+  console.error(`Error al suscribirse a nuevos bloques: ${error}`);
+
 return;
 }
 
