@@ -136,7 +136,8 @@ console.log(`Eventos encontrados entre los bloques ${fromBlock} y ${currentBlock
 await processEvents(events);
 
 } catch (error) {
-console.error(´Error al procesar eventos entre los bloques ${fromBlock} y ${currentBlock}: ${error}´);
+  console.error(`Error al procesar eventos entre los bloques ${fromBlock} y ${currentBlock}: ${error}`);
+
 }
 
 gethWeb3.eth.subscribe("newBlockHeaders", async (error, blockHeader) => {
