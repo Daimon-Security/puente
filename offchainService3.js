@@ -17,13 +17,19 @@ const {
 // Conexión a los nodos RPC
 const gethWeb3 = new Web3(GETH_RPC_URL);
 const bscWeb3 = new Web3(new Web3.providers.HttpProvider(BSC_RPC_URL));
-gethWeb3.currentProvider.on("error", (error) => {
+
+gethWeb3.eth.net.isListening().then(() => {
+  console.log("Geth está escuchando");
+}).catch((error) => {
   console.error("Error en el proveedor de Geth:", error);
 });
 
-bscWeb3.currentProvider.on("error", (error) => {
+bscWeb3.eth.net.isListening().then(() => {
+  console.log("BSC está escuchando");
+}).catch((error) => {
   console.error("Error en el proveedor de BSC:", error);
 });
+
 // Configuración de las cuentas y contratos
 const setupAccountAndContracts = (web3, tokenBridgeAddress, wrappedTokenAddress) => {
   const account = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
