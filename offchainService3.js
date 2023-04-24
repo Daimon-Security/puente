@@ -115,6 +115,8 @@ async function processQueue(eventsCollection) {
 
   setTimeout(() => processQueue(eventsCollection), 1000);
 }
+
+const startingBlock = 0;
 // Iniciar el servicio de escucha
 async function startListening() {
   const currentBlock = await gethWeb3.eth.getBlockNumber();
