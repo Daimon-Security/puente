@@ -118,23 +118,47 @@ async function processQueue(eventsCollection) {
 
 // Iniciar el servicio de escucha
 async function startListening() {
-  try {
-    const eventsCollection = await connectToDatabase();
-    const gethPastEvents = await gethTokenBridge.getPastEvents("TokensLocked", {
-      fromBlock: 0,
-      toBlock: "latest",
+  const currentBlock = await gethWeb3.eth.getBlockNumber();
+  const step = 5000; // Ajusta este valor según la cantidad de bloques que quieres consultar en cada iteración
+  let fromBlock = startingBlock;
+
+  while (fromBlock <= currentBlock) {
+    const toBlock = Math.min(fromBlock + step - 1, currentBlock);
+
+    try {
+      const events = await gethTokenBridge.getPastEvents("TokensLocked", {
+        fromBlock: fromBlock,
+        toBlock: toBlock,
+      });
+
+      console.log(`Eventos encontrados entre los bloques ${fromBlock} y ${toBlock}: ${events.length}`);
+      await processEvents(events);
+    } catch (error) {
+      console.error(`Error al procesar eventos entre los bloques ${fromBlock} y ${toBlock}: ${error}`);
+    }
+
+    fromBlock += step;
+  }
+
+  gethWeb3.eth.subscribe("newBlockHeaders", async (error, blockHeader) => {
+    if (error) {
+      console.error(`Error al suscribirse a nuevos bloques: ${error}`);
+      return;
+    }
+
+    const events = await gethTokenBridge.getPastEvents("TokensLocked", {
+      fromBlock: blockHeader.number,
+      toBlock: blockHeader.number,
     });
-    const bscPastEvents = await bscTokenBridge.getPastEvents("TokensLocked", {
-      fromBlock: 0,
-      toBlock: "latest",
-    });
-    console.log("Iniciando servicio de escucha...");
-    console.log("Eventos pasados en la cadena EVM forkeada de Geth:", gethPastEvents);
-    console.log("Eventos pasados en Binance Smart Chain (BSC):", bscPastEvents);
-    processQueue(eventsCollection);
+
+    await processEvents(events);
+  });
+}
+
   } catch (error) {
     console.error("Error al iniciar el servicio de escucha:", error);
   }
 }
+
 
 startListening();
