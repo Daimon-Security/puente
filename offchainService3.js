@@ -15,7 +15,7 @@ const {
 } = process.env;
 
 // Conexión a los nodos RPC
-const gethWeb3 = new Web3(new Web3.providers.HttpProvider((GETH_RPC_URL));
+const gethWeb3 = new Web3(new Web3.providers.HttpProvider(GETH_RPC_URL));
 const bscWeb3 = new Web3(new Web3.providers.HttpProvider(BSC_RPC_URL));
 
 gethWeb3.eth.net.isListening().then(() => {
