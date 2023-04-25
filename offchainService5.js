@@ -83,7 +83,37 @@ async function processEvent(event, retryCount = 0) {
     const gasEstimate = await wrappedToken.methods
       .mint(user, amount.toFixed(18))
       .estimateGas({ from: account.address });
+    }
 
+    async function processEvents(events) {
+      const eventsCollection = await connectToDatabase();
+
+      for (const event of events) {
+        // ... (omitido por brevedad)
+
+        if (!existingEvent) {
+          // ... (omitido por brevedad)
+        }
+
+      }
+
+      processQueue(eventsCollection);
+    }
+
+    async function processQueue(eventsCollection) {
+      const unprocessedEvents = await eventsCollection.find({ processed: false }).toArray();
+
+      for (const event of unprocessedEvents) {
+        const success = await processEvent(event);
+
+        if (success) {
+          await eventsCollection.updateOne(
+            { _id: event._id },
+            { $set: { processed: true } }
+          );
+        }
+      }
+    }
     const receipt = await wrappedToken.methods
       .mint(user, amount.toFixed(18))
 .send({ from: account.address, gas: gasEstimate });
