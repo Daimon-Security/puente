@@ -69,7 +69,47 @@ async function connectToDatabase() {
 // Reemplazar la función 'processEvent' con la versión mejorada
 const MAX_RETRIES = 3;
 
+async function processEvent(event, retryCount = 0)
+// ... (omitido por brevedad)
+
 async function processEvent(event, retryCount = 0) {
+  // ... (omitido por brevedad)
+}
+
+async function processQueue(eventsCollection) {
+  const unprocessedEvents = await eventsCollection.find({ processed: false }).toArray();
+
+  for (const event of unprocessedEvents) {
+    const success = await processEvent(event);
+
+    if (success) {
+      await eventsCollection.updateOne(
+        { _id: event._id },
+        { $set: { processed: true } }
+      );
+    }
+  }
+}
+
+async function processEvents(events) {
+  const eventsCollection = await connectToDatabase();
+
+  for (const event of events) {
+    // ... (omitido por brevedad)
+
+    if (!existingEvent) {
+      // ... (omitido por brevedad)
+    }
+
+  }
+
+  processQueue(eventsCollection);
+}
+
+// ... (omitido por brevedad)
+
+
+ {
   if (retryCount > MAX_RETRIES) {
     console.error(`Max retries reached for event ${JSON.stringify(event)}. Marking as failed.`);
     return false;
